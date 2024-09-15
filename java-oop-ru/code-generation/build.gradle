@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'com.adarshr.test-logger' version '2.1.1'
+    id 'checkstyle'
+    id 'io.freefair.lombok' version '8.4'
+
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.3'
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+    implementation group: 'com.github.stefanbirkner', name: 'system-lambda', version: '1.2.1'
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.0-rc1")
+}
+checkstyle {
+    toolVersion '8.41'
+}
+test {
+    useJUnitPlatform()
+}
+
+testlogger {
+    showStandardStreams = true
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task checkExercises(type: Checkstyle) {
+    file('.').eachDir { course ->
+        def exercise = project.hasProperty('exercise') ? project.exercise : ''
+        source course.name + '/' + exercise
+        include '**/*.java'
+        exclude '**/build/**'
+        classpath = files()
+    }
+}
