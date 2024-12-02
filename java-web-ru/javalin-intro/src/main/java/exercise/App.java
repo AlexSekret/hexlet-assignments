@@ -12,8 +12,7 @@ public final class App {
 
         // BEGIN
         Javalin app = Javalin.create(/*config*/)
-                .get("/welcome", ctx -> ctx.result("Welcome to Hexlet!"))
-                .start(7070);
+                .get("/welcome", ctx -> ctx.result("Welcome to Hexlet!"));
         return app;
         // END
     }

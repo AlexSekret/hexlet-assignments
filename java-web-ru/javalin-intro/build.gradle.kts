@@ -3,7 +3,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.48.0"
+    id("se.patrikerdes.use-latest-versions") version "0.2.18"
+    id("com.github.ben-manes.versions") version "0.51.0"
     application
 }
 
@@ -22,11 +23,11 @@ dependencies {
     // BEGIN
     implementation("io.javalin:javalin:6.3.0")
     // END
-    implementation("org.slf4j:slf4j-simple:2.0.7")
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    implementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
+    testImplementation(platform("org.junit:junit-bom:5.11.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("com.konghq:unirest-java:3.13.0")
-    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("com.konghq:unirest-java:4.0.0-RC2")
+    testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
 tasks.test {
