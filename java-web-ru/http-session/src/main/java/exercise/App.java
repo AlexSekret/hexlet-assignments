@@ -1,7 +1,6 @@
 package exercise;
 
 import io.javalin.Javalin;
-import io.javalin.validation.Validator;
 
 import java.util.List;
 import java.util.Map;
@@ -20,12 +19,12 @@ public final class App {
         app.get("/users", ctx -> {
             var query = ctx.queryParamMap();
             var users = USERS.subList(0, 5);
-                int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
-                int per = ctx.queryParamAsClass("per", Integer.class).getOrDefault(5);
-                var begin = page * per - per;
-                var end = page * per;
-                users = USERS.subList(begin, end);
-                ctx.json(users);
+            int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+            int per = ctx.queryParamAsClass("per", Integer.class).getOrDefault(5);
+            var begin = page * per - per;
+            var end = page * per;
+            users = USERS.subList(begin, end);
+            ctx.json(users);
         });
         // END
 
