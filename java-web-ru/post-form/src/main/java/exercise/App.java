@@ -41,12 +41,9 @@ public final class App {
             var lastName = StringUtils.capitalize(StringUtils.lowerCase(ctx.formParam("lastName")));
             var email = StringUtils.lowerCase(StringUtils.trim(ctx.formParam("email")));
             var password = StringUtils.defaultString(ctx.formParam("password"));
-            var passwordConfirmation = StringUtils.defaultString(ctx.formParam("passwordConfirmation"));
             var encryptedPassword = Security.encrypt(password);
-            if (StringUtils.equals(password, passwordConfirmation)) {
-                var user = new User(firstName, lastName, email, encryptedPassword);
-                UserRepository.save(user);
-            }
+            var user = new User(firstName, lastName, email, encryptedPassword);
+            UserRepository.save(user);
             ctx.redirect("/users");
         });
         // END
