@@ -63,43 +63,32 @@ public class PostsController {
 
     // BEGIN
     public static void edit(Context ctx) {
-        Long id = ctx.pathParamAsClass("page-id", Long.class).get();
-        Optional<Post> post = PostRepository.find(id);
-        if (post.isPresent()) {
-            EditPostPage page = new EditPostPage(String.valueOf(id), post.get().getName(), post.get().getBody(), Map.of());
-            PostPage postPage = new PostPage(post.get());
-            ctx.render("posts/edit.jte", model("page", page, "postPage", postPage));
-        } else {
-            ctx.result("Post not found").status(404);
-        }
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        var post = PostRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Post not found"));
+        EditPostPage page = new EditPostPage(id, post.getName(), post.getBody(), null);
+        ctx.render("posts/edit.jte", model("page", page));
     }
 
     public static void update(Context ctx) {
-        Long id = ctx.pathParamAsClass("page-id", Long.class).get();
-        Optional<Post> post = PostRepository.find(id);
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
         try {
-            if (post.isPresent()) {
-                var name = ctx.formParamAsClass("name", String.class)
-                        .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
-                        .get();
-
-                var body = ctx.formParamAsClass("body", String.class)
-                        .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
-                        .get();
-                post.get().setName(name);
-                post.get().setBody(body);
-                ctx.redirect(NamedRoutes.postsPath());
-            } else {
-                ctx.result("Post not found").status(404);
-            }
+            var post = PostRepository.find(id)
+                    .orElseThrow(() -> new NotFoundResponse("Post not found"));
+            var name = ctx.formParamAsClass("name", String.class)
+                    .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
+                    .get();
+            var body = ctx.formParamAsClass("body", String.class)
+                    .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
+                    .get();
+            post.setName(name);
+            post.setBody(body);
+            ctx.redirect(NamedRoutes.postsPath());
         } catch (ValidationException e) {
-            if (post.isPresent()) {
-                var postPage = new PostPage(post.get());
-                String name = ctx.formParam("name");
-                String body = ctx.formParam("body");
-                EditPostPage page = new EditPostPage(String.valueOf(id), name, body, e.getErrors());
-                ctx.render("posts/edit.jte", model("page", page, "postPage", postPage)).status(422);
-            }
+            String name = ctx.formParam("name");
+            String body = ctx.formParam("body");
+            EditPostPage page = new EditPostPage(id, name, body, e.getErrors());
+            ctx.render("posts/edit.jte", model("page", page)).status(422);
         }
     }
     // END

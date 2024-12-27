@@ -1,6 +1,4 @@
 @import exercise.dto.posts.EditPostPage
-@import exercise.dto.posts.PostPage
-@param PostPage postPage
 @param EditPostPage page
 
 @template.layout.page(
@@ -16,9 +14,14 @@
                 </ul>
             </div>
         @endif
-
         <div class="mx-auto p-4 py-md-5">
-            <form action="/posts/${postPage.getPost().getId()}" method="post">
+            <form action="/posts/${page.getId()}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">
+                        ID
+                        <input type="text" class="form-control" name="id" value="${page.getId()}" readonly/>
+                    </label>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">
                         Название
