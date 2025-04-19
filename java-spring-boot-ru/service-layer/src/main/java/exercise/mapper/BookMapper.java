@@ -27,7 +27,7 @@ public abstract class BookMapper {
     public abstract BookDTO map(Book model);
 
     //from BookCreateDTO to Book
-    @Mapping(target = "author.id", source = "authorId")
+    @Mapping(target = "author", source = "authorId")
     public abstract Book map(BookCreateDTO dto);
     // END
 
